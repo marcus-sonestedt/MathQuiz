@@ -10,35 +10,63 @@ class App extends Component {
       operators: ["+", "-", "*"],
       sizes: new Map([['lilla', [1, 5]], ['stora', [5, 9]]]),
       questions: null,
+      questionOrder: Array(0),
       currentQ: null,
     }
   }
 
-  startGame(mode, min, max) {
+  shuffleArray = array => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
+
+  startGame = (op, min, max) => {
     let qs = new Map();
     let c = 1;
 
     for (var x = min; x <= max; ++x) {
       for (var y = min; y <= max; ++y) {
-        qs.set(c++, <Question mode={mode} x={x} y={y}
-          onCorrect={() => this.showNextQuestion()} />);
+        const a =
+          op === "+" ? x + y :
+            op === "-" ? x - y :
+              op === "*" ? x * y :
+                undefined;
+
+        if (a < 0)
+          continue;
+
+        const t = `Vad är ${x} ${op} ${y} ?`;
+        const q = <Question question={t} answer={a}
+          onCorrect={this.showNextQuestion} />;
+
+        qs.set(c++, q);
       }
     }
 
+    const qo = Array(qs.size);
+    for (var i = 0; i < qs.size; ++i)
+      qo[i] = i + 1;
+
+    this.shuffleArray(qo);
+
     this.setState({
       questions: qs,
+      questionOrder: qo,
       currentQ: 1,
     });
   }
 
-  showNextQuestion() {
-    const nextQ = this.state.currentQ + 1;
-    if (nextQ <= this.state.questions.size)
-      this.setState({ currentQ: nextQ });
-    else {
+  showNextQuestion = () => {
+    let nextQ = this.state.currentQ + 1;
+
+    if (nextQ > this.state.questions.size) {
       alert("Klart!");
-      this.setState({ currentQ: null });
+      nextQ = null;
     }
+
+    this.setState({ currentQ: nextQ });
   }
 
   renderStart() {
@@ -47,7 +75,7 @@ class App extends Component {
         {this.state.operators.map(op =>
           <div key={op}>
             {Array.from(this.state.sizes.entries()).map(e => {
-              let k = e[0], v=e[1];
+              let k = e[0], v = e[1];
               return (
                 <span key={k}>
                   <button className="App-startButton"
@@ -55,9 +83,9 @@ class App extends Component {
                     Träna {k} {op} !
                   </button>
                   &nbsp;
-                </span>);
-            }
-            )}
+                </span>
+              );
+            })}
           </div>
         )}
       </div>
@@ -65,10 +93,11 @@ class App extends Component {
   }
 
   renderQuestion() {
+    const qKey = this.state.questionOrder[this.state.currentQ - 1];
     return (
-      <div className="App-run">
+      <div className="App-run" key={this.state.currentQ}>
         <p>Fråga {this.state.currentQ} of {this.state.questions.size}:</p>
-        {this.state.questions.get(this.state.currentQ)}
+        {this.state.questions.get(qKey)}
       </div>
     );
   }
@@ -77,7 +106,7 @@ class App extends Component {
     return (
       <div className="App" >
         <header className="App-header">
-          <h1>Mattequiz!</h1>
+          <h1>Matteträning!</h1>
           {this.state.currentQ === null
             ? this.renderStart()
             : this.renderQuestion()}

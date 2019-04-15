@@ -5,43 +5,48 @@ class Question extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      answer:
-        props.mode === "+" ? props.x + props.y :
-          props.mode === "-" ? props.x - props.y :
-            props.mode === "*" ? props.x * props.y :
-              undefined,
       correct: null,
-      helpText: ""
+      response: ""
     }
   }
 
-  checkAnswer(value) {
-    const correct = value === this.state.answer.toString();
-    this.setState({ correct: correct });
+  responseChanged = event => {
+    const correct = event.target.value === this.props.answer.toString();
+
     if (correct) {
-      setTimeout(2000, () => this.onCorrect());
+      setTimeout(() => this.props.onCorrect(), 1000);
     }
+
+    this.setState({
+      correct: correct,
+      response: event.target.value,
+    });
   }
 
-  help() {
-    this.setState({ helpText: this.state.answer });
+  help = event => {
+    this.setState({ response: this.props.answer });
+    var ev = { target: { value: this.props.answer.toString() } };
+    this.responseChanged(ev);
   }
 
-  render() {
+  render = () => {
     let answerClass =
       this.state.correct === true ? "correct" :
         this.state.correct === false ? "incorrect" :
           "";
 
     return (
-      <div className="Question">
-        <p className="Question-q">Vad är {this.props.x} {this.props.mode} {this.props.y} ?</p>
-        <span>Svar:</span>
-        <input className={"Question-a " + answerClass} type="text"
-          onChange={inp => this.checkAnswer(inp.value)}
-          value={this.state.helpText} />
+      <div className="Question" key={this.props.qiestion}>
+        <p className="Question-q">{this.props.question}</p>
+        <span>Svar:&nbsp;
+        <input className={"Question-a " + answerClass}
+            type="text"
+            onChange={this.responseChanged}
+            value={this.state.response}
+            disabled={this.state.correct} />
+        </span>
         <p><button className="Question-helpButton"
-          onClick={() => this.help()}>Hjälp!</button>
+          onClick={e => this.help(e)}><b>Hjälp!</b></button>
         </p>
       </div>
     );

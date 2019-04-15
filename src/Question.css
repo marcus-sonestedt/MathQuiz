@@ -7,10 +7,10 @@
   font-weight: bold;
 }
 
-.Question-a .correct {
+.Question-a.correct {
   background: limegreen;
 }
 
-.Question-a .incorrect {
-  background: pink;
+.Question-a.incorrect {
+  background: #f44;
 }
