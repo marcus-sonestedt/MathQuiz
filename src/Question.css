@@ -1,0 +1,16 @@
+.Question {
+  text-align: center;
+  font-weight: bold;
+}
+
+.Question-qq {
+  font-weight: bold;
+}
+
+.Question-a .correct {
+  background: limegreen;
+}
+
+.Question-a .incorrect {
+  background: pink;
+}
