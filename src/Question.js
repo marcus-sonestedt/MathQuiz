@@ -40,7 +40,7 @@ class Question extends Component {
         <p className="Question-q">{this.props.question}</p>
         <span>Svar:&nbsp;
         <input className={"Question-a " + answerClass}
-            type="text"
+            type="number" autoFocus="true"
             onChange={this.responseChanged}
             value={this.state.response}
             disabled={this.state.correct} />
