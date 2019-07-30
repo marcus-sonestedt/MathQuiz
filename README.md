@@ -1,5 +1,4 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-a
-
+# MathQuiz
 This is just a small add,sub,mult quiz single-page webapp for single digit numbers.
 
 I hacked it together for my daughter who forgot her math quiz notes when she was at my mother-in-law for a week during easter. 
@@ -7,9 +6,7 @@ This allowed her to work on numbers on her iPad, just by accessing the static AW
 
 Feel free to submit patches for multi-language and such, as it is currently Swedish-only. :)
 
-** Standard React README included below if you want to fork/hack this. **
-
-# React README
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-a
 
 ## Available Scripts
 
